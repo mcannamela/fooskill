@@ -1,2 +1,3 @@
-class Goal(object):
+from pymc import Stochastic
+class Goal(Stochastic):
     pass
