@@ -1,0 +1,2 @@
+class PlayerPool(object):
+    pass
