@@ -54,7 +54,8 @@ class TalentPool(Stochastic):
         return normal_logp(np.log(std_dev_of_skill), mu, sigma)
 
     def logp_of_skill_parameters(self, mean_skill, std_dev_of_skill):
-        return self.logp_of_mean_skill(self.value, mean_skill) + self.logp_of_std_dev_of_skill(value, std_dev_of_skill)
+        return (self.logp_of_mean_skill(self.value, mean_skill) +
+                self.logp_of_std_dev_of_skill(self.value, std_dev_of_skill))
 
     def __init__(self, *args, **kwargs):
         kwargs['logp'] = self._talent_pool_logp_fun

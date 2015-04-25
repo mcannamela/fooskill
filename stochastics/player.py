@@ -48,9 +48,10 @@ class Player(Stochastic):
                            PlayerValueAccessor.get_std_dev_of_stopping_power(value))
 
     def logp_of_performance(self, firepower, stopping_power):
-        return self.logp_of_firepower(self.value, firepower) + self.logp_of_stopping_power(self.value, stopping_power)
+        return (self.logp_of_firepower(self.value, firepower) +
+                self.logp_of_stopping_power(self.value, stopping_power))
 
     def __init__(self, *args, **kwargs):
-        kwargs['logp'] = self._player_logp_fun()
-        super(Player, self).__init__(kwargs)
+        kwargs['logp'] = self._player_logp_fun
+        super(Player, self).__init__(*args, **kwargs)
 
