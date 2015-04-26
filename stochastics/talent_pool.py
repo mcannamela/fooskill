@@ -4,31 +4,31 @@ import numpy as np
 class TalentPoolValueAccessor(object):
 
     @classmethod
-    def get_mean_skill_mean(self, value):
+    def get_mean_skill_mean(cls, value):
         return value[0]
 
     @classmethod
-    def get_mean_skill_std_dev(self, value):
+    def get_mean_skill_std_dev(cls, value):
         return value[1]
 
     @classmethod
-    def get_log_of_std_dev_of_skill_mean(self, value):
+    def get_log_of_std_dev_of_skill_mean(cls, value):
         return value[2]
 
     @classmethod
-    def get_log_of_std_dev_of_skill_std_dev(self, value):
+    def get_log_of_std_dev_of_skill_std_dev(cls, value):
         return value[3]
 
     @classmethod
     def build_value(cls,
                     mean_skill_mean,
                     mean_skill_std_dev,
-                    log_of_std_dev_of_mean_skill_mean,
+                    log_of_std_dev_of_skill_mean,
                     log_of_std_dev_of_skill_std_dev):
 
         return np.array([mean_skill_mean,
                          mean_skill_std_dev,
-                         log_of_std_dev_of_mean_skill_mean,
+                         log_of_std_dev_of_skill_mean,
                          log_of_std_dev_of_skill_std_dev], dtype=float)
 
 SQRT_TWO_PI = (2*np.pi)**.5
@@ -46,15 +46,19 @@ class TalentPool(StochasticWithLogP):
 
 
     PRIOR_MEAN = 0.0
+    PRIOR_STD_DEV = 1.0
 
     @classmethod
     def _compute_logp(cls, value, **parent_values):
 
+        # the mean skill is anchored, but we have flat priors over:
+        # 1. the std dev of the mean skill. we don't know how by much variation in mean skill there is between individuals.
+        # 2. the mean of the std dev of the skill. we don't know how variable an individual's performance is likely to be.
+        # 3. the std dev of the std dev of the skill. we don't know how wild is the wildest individual or how consistent the most consistent
         mean_skill_mean = TalentPoolValueAccessor.get_mean_skill_mean(value)
-        mean_skill_std_dev = TalentPoolValueAccessor.get_mean_skill_std_dev(value)
+        logp = compute_gaussian_logp(mean_skill_mean, cls.PRIOR_MEAN, cls.PRIOR_STD_DEV)
 
-        #std_dev of skill doesn't come into play, meaning all variances are a-priori equally likely
-        return compute_gaussian_logp(mean_skill_mean, cls.PRIOR_MEAN, mean_skill_std_dev)
+        return logp
 
     @classmethod
     def logp_of_mean_skill(self, value, mean_skill):
