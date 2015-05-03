@@ -1,6 +1,5 @@
-from pymc import Stochastic
 from stochastics.stochastic_with_log_p_and_random import StochasticWithLogPAndRandom
-from stochastics.talent_pool import TalentPool, compute_gaussian_logp, TalentPoolValueAccessor
+from stochastics.talent_pool import TalentPool, compute_gaussian_logp
 import numpy as np
 
 class PlayerValueAccessor(object):

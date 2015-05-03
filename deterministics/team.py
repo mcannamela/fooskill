@@ -1,5 +1,6 @@
 import numpy as np
 from pymc import Deterministic
+from deterministics.deterministic_with_compute_value import DeterministicWithComputeValue
 from stochastics.player_performance import PlayerPerformanceValueAccessor
 
 
@@ -34,7 +35,7 @@ class TeamValueAccessor(object):
                          stopping_power_vs_defense], dtype=float)
 
 
-class Team(Deterministic):
+class Team(DeterministicWithComputeValue):
 
     @classmethod
     def _select_offensive_and_defensive_performance(cls, player1_on_offense, player1_performance, player2_performance):
@@ -58,7 +59,8 @@ class Team(Deterministic):
         defensive_firepower = PlayerPerformanceValueAccessor.get_firepower(defensive_performance)
 
         stopping_power_vs_offense = PlayerPerformanceValueAccessor.get_stopping_power(defensive_performance)
-        stopping_power_vs_defense = stopping_power_vs_offense + PlayerPerformanceValueAccessor.get_stopping_power(offensive_performance)
+        stopping_power_vs_defense = (stopping_power_vs_offense +
+                                     PlayerPerformanceValueAccessor.get_stopping_power(offensive_performance))
 
         return TeamValueAccessor.build_value(offensive_firepower,
                                              defensive_firepower,
