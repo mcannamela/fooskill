@@ -14,7 +14,7 @@ class TalentPoolTestCase(unittest.TestCase):
         self._log_of_std_dev_of_skill_std_dev = 1.0
 
     def _build_talent_pool_value(self):
-        TalentPoolValueAccessor.build_value(self._mean_skill_mean,
+        return TalentPoolValueAccessor.build_value(self._mean_skill_mean,
                                             self._mean_skill_std_dev,
                                             self._log_of_std_dev_of_skill_mean,
                                             self._log_of_std_dev_of_skill_std_dev)
@@ -24,7 +24,7 @@ class TalentPoolTestCase(unittest.TestCase):
                    value=self._build_talent_pool_value())
 
     def test_fit(self):
-        talent_pool = TalentPool(self.POOL_NAME, self._build_talent_pool_value())
+        talent_pool = TalentPool(self.POOL_NAME, value=self._build_talent_pool_value())
 
         mcmc = pymc.MCMC({talent_pool})
 
