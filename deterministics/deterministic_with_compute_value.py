@@ -4,7 +4,7 @@ from pymc import Deterministic
 class DeterministicWithComputeValue(Deterministic):
 
     @classmethod
-    def _compute_value(cls, value, **parent_values):
+    def _compute_value(cls, **parent_values):
         raise NotImplementedError()
 
     def __init__(self, name, parents, doc='', **kwargs):
